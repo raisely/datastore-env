@@ -1,0 +1,30 @@
+{
+  "name": "datastore-env",
+  "version": "1.0.0",
+  "description": "Retrieve .env from google datastore",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google-datastore",
+    "datastore",
+    ".env",
+    "env",
+    "google",
+    "cloud"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/datastore": "^1.4.0"
+  },
+  "dev-dependencies": {
+    "babel-eslint": "^6.0.0",
+    "eslint": "^3.16.1",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.10.0"
+  }
+}

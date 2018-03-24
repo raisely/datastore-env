@@ -1,0 +1,29 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "mocha": true
+    },
+    "extends": "airbnb",
+    "rules": {
+      "strict": [0, "global"],
+      "require-yield": "off",
+      "indent": [2, "tab", { "SwitchCase": 1, "VariableDeclarator": 1 }],
+      "no-tabs": 0,
+      "no-use-before-define": ["error", "nofunc"],
+      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+      "no-param-reassign": ["error", { "props": false }],
+      "camelcase": ["error", { "properties": "always" }],
+      "comma-dangle": ["error", {
+          "arrays": "always-multiline",
+          "objects": "always-multiline",
+          "imports": "always-multiline",
+          "exports": "always-multiline",
+          "functions": "never",
+      }],
+      "no-restricted-syntax": ["error", "LabeledStatement"],
+      "no-continue": "off"
+    }
+}

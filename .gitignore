@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+.rdb
+.pem
+.log
+.env
+dump.rdb
+reports/
+ngrok
+tmp/
+npm-debug.log
+.heapsnapshot
+.idea/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+import/db/*
+
+.lint_fails
