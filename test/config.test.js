@@ -82,7 +82,7 @@ describe('generateRequired', () => {
 
 });
 
-describe('getEnv', () => {
+describe('get', () => {
 	let environment;
 
 	before(async () => {
@@ -94,15 +94,15 @@ describe('getEnv', () => {
 	});
 
 	it('loads from environment', async () => {
-		const expected = 'key is set';
+		const expected = 'ENV_KEY is set';
 		process.env.ENV_KEY = expected;
 		const value = await environment.get('ENV_KEY');
 		expect(value).to.eq(expected);
 	});
 	it('loads from datastore', async () => {
-		const expected = 'key is set';
+		const expected = 'DATASTORE_KEY is set';
 		await setKey('DATASTORE_KEY', expected);
-		const value = await environment.get('ENV_KEY');
+		const value = await environment.get('DATASTORE_KEY');
 		expect(value).to.eq(expected);
 	});
 });
