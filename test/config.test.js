@@ -31,7 +31,7 @@ describe('loadEnvironment', () => {
 		const message = `3 configuration keys are missing from your
 datastore or environment: ${required.join()}
 Placeholders have been added to your datastore so you can edit them.
-You can edit them at https://console.cloud.google.com/datastore`;
+You can edit them at https://console.cloud.google.com/datastore/entities/query?project=my-project-id&kind=Env`;
 
 		it('rejects with exception', async () =>
 			expect(environment.loadEnvironment()).to.eventually
@@ -115,7 +115,8 @@ function checkKey(key, value) {
 
 async function checkDatastoreKey(key, value) {
 	const dsKey = datastore.key(['Env', key.toUpperCase()]);
-	const actual = await datastore.get(dsKey);
+	const result = await datastore.get(dsKey);
+	const actual = result[0] ? result[0].value : undefined;
 	expect(actual, `${key} missing (${value})`).to.eq(value);
 }
 
@@ -125,7 +126,7 @@ async function setKey(key, value) {
 
 	const dsKey = datastore.key(['Env', key]);
 
-	await datastore.save({ key: dsKey, data: value });
+	await datastore.save({ key: dsKey, data: { value } });
 }
 
 async function init() {
@@ -141,7 +142,9 @@ async function init() {
 }
 
 async function cleanUp() {
-	process.env.ENV_KEY = undefined;
+	delete process.env.ENV_KEY;
+	delete process.env.DATASTORE_KEY;
+	delete process.env.DEFAULT_KEY;
 	const keys = required.map(key => datastore.key(['Env', key]));
 	await datastore.delete(keys);
 }
