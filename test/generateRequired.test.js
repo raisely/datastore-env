@@ -29,9 +29,10 @@ describe('generateRequired', () => {
 					done(err);
 				}
 
-				// the *entire* stdout and stderr (buffered)
+				/* eslint-disable no-console */
 				console.log(stdout);
 				console.log(stderr);
+				/* eslint-enable no-console */
 				done();
 			});
 		});
