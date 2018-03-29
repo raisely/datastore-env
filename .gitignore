@@ -19,3 +19,4 @@ npm-debug.log
 import/db/*
 
 .lint_fails
+test/.tmpRequired.test
