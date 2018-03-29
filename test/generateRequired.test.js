@@ -1,6 +1,7 @@
 const generateRequired = require('../lib/generateRequired');
 const chai = require('chai');
 const chaiFiles = require('chai-files');
+const { exec } = require('child_process');
 
 chai.use(chaiFiles);
 
@@ -8,15 +9,39 @@ const { expect } = chai;
 const { file } = chaiFiles;
 
 const envFile = 'test/env.example';
-const requireFile = 'test/.tmpRequired.test';
 const expectedOutput = 'test/required.example';
 
 describe('generateRequired', () => {
-	before(() => {
-		return generateRequired({ envFile, requireFile });
+	describe('call from script', () => {
+		const requireFile = 'test/.requiredFromScript.tmp';
+
+		before(() => generateRequired({ envFile, requireFile }));
+
+		itGeneratesCorrectFileContents(requireFile);
 	});
 
-	it('generates correct file contents', () => {
-		expect(file(requireFile)).to.equal(file(expectedOutput));
+	describe('call from command line', () => {
+		const requireFile = 'test/.requiredFromBin.tmp';
+
+		before((done) => {
+			exec(`./createRequiredEnv.js -i ${envFile} -o ${requireFile}`, (err, stdout, stderr) => {
+				if (err) {
+					done(err);
+				}
+
+				// the *entire* stdout and stderr (buffered)
+				console.log(stdout);
+				console.log(stderr);
+				done();
+			});
+		});
+
+		itGeneratesCorrectFileContents(requireFile);
 	});
 });
+
+function itGeneratesCorrectFileContents(outputFile) {
+	it('generates correct file contents', () => {
+		expect(file(outputFile)).to.equal(file(expectedOutput));
+	});
+}
