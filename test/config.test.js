@@ -2,6 +2,7 @@
 
 const DatastoreEnvironment = require('../lib/datastoreEnvironment');
 const Datastore = require('@google-cloud/datastore');
+const _ = require('lodash');
 
 // Instantiate a datastore client
 const datastore = Datastore();
@@ -18,8 +19,6 @@ const defaults = { DEFAULT_KEY: 'DEFAULT_KEY is set' };
 
 describe('loadEnvironment', () => {
 	let environment;
-
-	after(cleanUp);
 
 	describe('When all config is absent', () => {
 		before(() => {
@@ -63,6 +62,7 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 			environment = await init();
 			await environment.loadEnvironment();
 		});
+		after(cleanUp);
 
 		it('Sets variable from .env', () => {
 			checkKey('ENV_KEY');
@@ -76,10 +76,55 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 			checkKey('DEFAULT_KEY');
 		});
 	});
-});
 
-describe('generateRequired', () => {
+	describe('When datastore is missing', () => {
+		const googleVariables = ['GOOGLE_APPLICATION_CREDENTIALS', 'DATASTORE_EMULATOR_HOST', 'DATASTORE_PROJECT_ID'];
+		let savedConfig;
+		before(() => {
+			savedConfig = _.pick(process.env, googleVariables);
+			googleVariables.forEach(key => delete process.env[key]);
+			environment = new DatastoreEnvironment({ required });
+		});
+		after(() => {
+			Object.assign(process.env, savedConfig);
+		});
 
+		describe('datastoreRequired: false', () => {
+			describe('all variables present', () => {
+				before(() => {
+					required.forEach((key) => {
+						process.env[key] = `${key} is set`;
+					});
+				});
+
+				after(cleanEnv);
+
+				it('loads from environment', async () => {
+					const config = await environment.verifyEnvironment();
+					expect(config).to.have.keys(required);
+				});
+			});
+
+			describe('variables missing', () => {
+				it('notes it in the exception', () => {
+					const message = `3 configuration keys are missing: ${required.join()}
+No Datastore environment was found, so only used environment variables.
+(check GOOGLE_APPLICATION_CREDENTIALS environment variable if you want to use datastore)`;
+
+					return expect(environment.loadEnvironment())
+						.to.eventually.be.rejectedWith(message);
+				});
+			});
+		});
+		context('datastoreRequired: true', () => {
+			after(cleanEnv);
+
+			it('throws exception', () => {
+				expect(() => new DatastoreEnvironment({ datastoreRequired: true }))
+					.to.throw('No Datastore environment was found! (and datastoreRequired was true)');
+			});
+		});
+	});
 });
 
 describe('get', () => {
@@ -141,10 +186,13 @@ async function init() {
 	return environment;
 }
 
-async function cleanUp() {
+function cleanEnv() {
 	delete process.env.ENV_KEY;
 	delete process.env.DATASTORE_KEY;
 	delete process.env.DEFAULT_KEY;
+}
+
+async function cleanUp() {
 	const keys = required.map(key => datastore.key(['Env', key]));
 	await datastore.delete(keys);
 }
