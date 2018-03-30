@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha -w test/"
+    "test": "mocha -w test/",
+    "datastore": "gcloud beta emulators datastore start --no-store-on-disk"
   },
   "bin" : { "create-env-require" : "./cli.js" },
   "keywords": [
