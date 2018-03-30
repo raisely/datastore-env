@@ -23,7 +23,9 @@ describe('generateRequired', () => {
 	describe('call from command line', () => {
 		const requireFile = 'test/.requiredFromBin.tmp';
 
-		before((done) => {
+		before(function executeShell(done) {
+			this.timeout(10000);
+
 			exec(`./createRequiredEnv.js -i ${envFile} -o ${requireFile}`, (err, stdout, stderr) => {
 				if (err) {
 					done(err);
