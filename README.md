@@ -90,10 +90,13 @@ If it is not possible to connect to datastore, datastore-env will continue witho
 ## Datastore emulator
 
 You can run the Google Cloud Datastore Emulator locally:
-https://cloud.google.com/datastore/docs/tools/datastore-emulator
+<https://cloud.google.com/datastore/docs/tools/datastore-emulator>
 
 ## Connect to Cloud Datastore
 
 Connect to one of your Cloud Datastore's by setting the environment variable
 `GOOGLE_APPLICATION_CREDENTIALS` to the path of a json credentials file with access
 to the service.
+
+Learn more about getting a credentials file at:
+<https://developers.google.com/accounts/docs/application-default-credentials>
