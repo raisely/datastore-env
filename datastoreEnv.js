@@ -8,7 +8,9 @@ const command = process.argv[2];
 const helperArgs = process.argv.slice(3);
 
 switch (command) {
-	case 'genRequired':
+	case 'generate:required':
+	case 'gen:required':
+	case 'g:required':
 		createRequired(helperArgs);
 		break;
 	case 'uploadEnv':
@@ -17,5 +19,5 @@ switch (command) {
 	default:
 		/* eslint-disable no-console */
 		console.log(`Unknown command: ${command}`);
-		console.log('Known commands: genRequired, uploadEnv');
+		console.log('Known commands: generate:required, upload:env');
 }

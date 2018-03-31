@@ -1,6 +1,7 @@
 const execHelper = require('./util/execHelper');
 const chai = require('chai');
 const chaiFiles = require('chai-files');
+const fs = require('fs');
 
 chai.use(chaiFiles);
 
@@ -14,9 +15,13 @@ describe('generateRequired', () => {
 	describe('call from command line', () => {
 		const requireFile = 'test/.requiredFromBin.tmp';
 
-		before(execHelper(`genRequired -i ${envFile} -o ${requireFile}`));
+		before(execHelper(`gen:required -i ${envFile} -o ${requireFile}`));
 
 		itGeneratesCorrectFileContents(requireFile);
+
+		after(() => {
+			fs.unlinkSync(requireFile);
+		});
 	});
 });
 
