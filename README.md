@@ -1,4 +1,4 @@
-# datastore env
+# datastore-env
 
 Save your environment variables in Google Cloud Datastore
 
@@ -6,16 +6,17 @@ Save your environment variables in Google Cloud Datastore
 
 * Loads variables from your Datastore into an object storing them as key value pairs
 * (Optionally) Merges the variables into `process.env` to save rewriting code
-* Automatically generate a list of required variables from your `.env` file
-* Fails fast when one or more necessary environment variables is missing
+* Can automatically generate a list of required variables from your `.env` file
+* Fails fast when one or more required environment variables is missing from your configuration
 * Creates placeholders in your datastore for missing variables so you just need fill them with the correct value
+* Initialise the datastore config from an existing `.env` file
 
 Based on [this Python Gist](https://gist.github.com/SpainTrain/6bf5896e6046a5d9e7e765d0defc8aa8)
 
-This is useful for migrating projects that make heavy use of .env to Google Cloud
+This is useful for migrating projects that make heavy use of `.env` to Google Cloud
 if you don't want to refactor code and don't want API keys, etc stored in your app.yaml
 
-NB: If you use a `.env` file, you must still use a tool like [dotenv](https://github.com/motdotla/dotenv) to load those variables.
+NB: If you use a `.env` file, you must still use a tool like [dotenv](https://github.com/motdotla/dotenv) to load those variables into `process.env`.
 
 # Getting Started
 
