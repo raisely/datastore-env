@@ -23,7 +23,7 @@ NB: If you use a `.env` file, you must still use a tool like [dotenv](https://gi
 npm install --save datastore-env
 
 # Generate a list of required environment variables
-npm run env -- create-env-require -i .env -o config/requiredEnv.js
+npm run env -- datastore-env generate:required -i .env -o config/requiredEnv.js
 ```
 Then in your application
 
