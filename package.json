@@ -8,7 +8,7 @@
     "test": "mocha -w test/",
     "datastore": "gcloud beta emulators datastore start --no-store-on-disk"
   },
-  "bin" : { "create-env-require" : "./cli.js" },
+  "bin" : { "datastore-env" : "./datastoreEnv.js" },
   "keywords": [
     "google-datastore",
     "datastore",
