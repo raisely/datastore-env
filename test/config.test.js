@@ -1,5 +1,6 @@
 'use strict';
 
+require('./testHelper');
 const DatastoreEnvironment = require('../lib/datastoreEnvironment');
 const Datastore = require('@google-cloud/datastore');
 const _ = require('lodash');
@@ -16,13 +17,15 @@ const defaults = { DEFAULT_KEY: 'DEFAULT_KEY is set' };
 
 let datastore;
 
-before(configEnvironment);
-
 describe('loadEnvironment', () => {
 	let environment;
 
+	before(() => { datastore = new Datastore(); });
+
 	describe('When all config is absent', () => {
 		before(() => {
+			before(() => { datastore = new Datastore(); });
+
 			environment = new DatastoreEnvironment({ required });
 		});
 
@@ -131,6 +134,7 @@ describe('get', () => {
 	let environment;
 
 	before(async () => {
+		datastore = new Datastore();
 		environment = await init();
 		environment = new DatastoreEnvironment();
 	});
@@ -196,29 +200,4 @@ async function cleanUp() {
 	cleanEnv();
 	const keys = required.map(key => datastore.key(['Env', key]));
 	await datastore.delete(keys);
-}
-
-/**
-  * This allows for tests to still pass
-  */
-function configEnvironment() {
-	let found = false;
-	const datastoreKeys = ['GOOGLE_APPLICATION_CREDENTIALS', 'DATASTORE_EMULATOR_HOST'];
-
-	datastoreKeys.forEach((key) => { found = found || process.env[key]; });
-
-	if (!found) {
-		throw new Error(`No Google Datastore environment found.
-Expected it to be defined by one of these environment variables:
-	${datastoreKeys.join(',')}
-A datastore is needed for testing. To install the datastore emultator, visit:
-	https://cloud.google.com/datastore/docs/tools/datastore-emulator
-To run the emulator, run
-	npm run datastore`);
-	}
-
-	if (!process.env.DATASTORE_PROJECT_ID) process.env.DATASTORE_PROJECT_ID = 'my-project-id';
-
-	// Instantiate a datastore client
-	datastore = Datastore();
 }

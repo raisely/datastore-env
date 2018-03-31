@@ -55,7 +55,7 @@ const settings = env.verifyEnvironment()
 ```
 
 # Generating Required Variables
-The command `npm run env -- create-env-require -i .env -o config/requiredEnv.js`
+The command `npm run env -- gen:required -i .env -o config/requiredEnv.js`
 will generate your list of required variables that will be loaded from the
 datastore settings.
 This script can be used as part of a build process to automatically add new keys.
@@ -74,6 +74,22 @@ To ignore all entries after a certain line, use
 ``` sh
 # datastore-env-ignore-all
 ```
+
+# Initialising your Datastore
+You can initialise your datastore from a `.env` file by calling
+
+```sh
+npm run env -- datastore-env upload:env -i .env
+```
+
+This script will upload the contents of the selected `.env` file to your datastore
+
+By default the script will NOT overwrite existing keys, and will skip any keys
+marked optional in your `.env` file (using the same indicators in comments as when Generating
+required variables (see above).
+
+You can alter the behaviour by using the command line arguments `--overwrite` or
+`--include-optional` respectively.
 
 # Running Locally
 There are 3 ways you can use and test this library when running locally.

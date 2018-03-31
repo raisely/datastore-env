@@ -3,6 +3,7 @@
 'use strict';
 
 const createRequired = require('./lib/workers/createRequiredEnv');
+const uploadDotEnv = require('./lib/workers/uploadEnv');
 
 const action = process.argv[2];
 const helperArgs = process.argv.slice(3);
@@ -13,8 +14,8 @@ switch (action) {
 	case 'g:required':
 		createRequired(helperArgs);
 		break;
-	case 'uploadEnv':
-		// uploadEnv
+	case 'upload:env':
+		uploadDotEnv(helperArgs);
 		break;
 	default:
 		/* eslint-disable no-console */
