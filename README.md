@@ -67,9 +67,7 @@ const deasync = require('deasync');
 
 // Wrap loadEnvironment in a node callback style
 function asyncLoad(cb) {
-	env.loadEnvironment().then(() => {
-		cb();
-	});
+	env.loadEnvironment().then(cb).catch(cb);
 }
 
 // This will block until loadEnvironment has finished
