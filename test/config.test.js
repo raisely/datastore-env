@@ -109,6 +109,11 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 			});
 
 			describe('variables missing', () => {
+				before(() => {
+					// Need to set a project ID or it will abort
+					if (!process.env.DATASTORE_PROJECT_ID) process.env.DATASTORE_PROJECT_ID = 'my-project-id';
+				});
+
 				it('notes it in the exception', () => {
 					const message = `3 configuration keys are missing: ${required.join()}
 No Datastore environment was found, so only used environment variables.
