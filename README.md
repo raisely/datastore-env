@@ -49,10 +49,33 @@ const env = new DatastoreEnvironment(options);
 // Load all required keys into process.env
 // If some keys are not set, will throw an exception indicating which ones
 // and suggest a URL to visit to set them
-env.loadEnvironment();
+await env.loadEnvironment();
 
 // OR if you only want to load the settings but not merge them with process.env
 const settings = env.verifyEnvironment()
+```
+
+## A note on migrating from dotenv
+dotenv runs synchronously, loadEnvironment, as it's querying a database is asynchronous.
+If you wish to wait on this without restructuring a lot of code, you could make use
+of something like [deasync](https://github.com/abbr/deasync).
+
+You can achieve this like so:
+
+```javascript
+const deasync = require('deasync');
+
+// Wrap loadEnvironment in a node callback style
+function asyncLoad(cb) {
+	env.loadEnvironment().then(() => {
+		cb();
+	});
+}
+
+// This will block until loadEnvironment has finished
+deasync(asyncLoad)();
+
+console.log(process.env['FROM_DATASTORE']);
 ```
 
 # Generating Required Variables
