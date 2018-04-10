@@ -29,7 +29,7 @@ describe('loadEnvironment', () => {
 			environment = new DatastoreEnvironment({ required });
 		});
 
-		afterEach(cleanUp);
+		afterEach(cleanEnv);
 
 		const message = `3 configuration keys are missing: ${required.join()}
 Placeholders have been added to your datastore so you can edit them.
@@ -55,6 +55,7 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 				.be.rejectedWith(message);
 
 			required.forEach((key) => {
+				console.log(process.env[key])
 				expect(process.env[key]).to.not.eq(placeholder);
 			});
 		});
