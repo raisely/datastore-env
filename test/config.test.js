@@ -40,7 +40,7 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 				.be.rejectedWith(message));
 		it('creates placeholder variables', async () => {
 			try {
-				await environment.loadEnvironment();
+				await environment.loadEnvironment(true);
 			} catch (e) {
 				// Ignore it we want to check if the
 				// placeholders were put in the datastore
@@ -51,7 +51,7 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 			await Promise.all(promises);
 		});
 		it("doesn't load placeholder variables into environment", async () => {
-			await expect(environment.loadEnvironment()).to.eventually
+			await expect(environment.loadEnvironment(true)).to.eventually
 				.be.rejectedWith(message);
 
 			required.forEach((key) => {
