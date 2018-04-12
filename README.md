@@ -81,7 +81,7 @@ console.log(process.env['FROM_DATASTORE']);
 ```
 
 # Generating Required Variables
-The command `npm run env -- gen:required -i .env -o config/requiredEnv.js`
+The command `npm run env -- datastore-env gen:required -i .env -o config/requiredEnv.js`
 will generate your list of required variables that will be loaded from the
 datastore settings.
 This script can be used as part of a build process to automatically add new keys.
