@@ -12,7 +12,7 @@ chai.use(chaiFiles);
 const { expect } = chai;
 
 const allEnvValues = {
-	FAVOURITE_COLOUR: 'blue',
+	FAVORITE_COLOR: 'blue',
 	SERVER_URL: 'http://test.example/?a=1',
 	DEV_ONLY_VAR: '1',
 	API_KEY: 'a secret',
@@ -21,6 +21,7 @@ const allEnvValues = {
 };
 
 const requiredKeys = ['API_KEY', 'SERVER_URL'];
+const optionalKeys = ['FAVORITE_COLOR'];
 
 const envFile = 'test/env.example';
 
@@ -32,15 +33,21 @@ describe('upload:env', () => {
 	afterEach(clearKeys);
 
 	describe('skip optional', () => {
-		before(execHelper(`upload:env -i ${envFile}`));
+		before(execHelper(`upload:env -i ${envFile} --include=required`));
 
 		itWritesCorrectValues(requiredKeys);
 	});
 
-	describe('include optional', () => {
-		before(execHelper(`upload:env -i ${envFile} --include-optional`));
+	describe('include all', () => {
+		before(execHelper(`upload:env -i ${envFile} --include=all`));
 
 		itWritesCorrectValues(Object.keys(allEnvValues));
+	});
+
+	describe('include optional', () => {
+		before(execHelper(`upload:env -i ${envFile}`));
+
+		itWritesCorrectValues(requiredKeys.concat(optionalKeys));
 	});
 
 	describe('overwrite existing', () => {

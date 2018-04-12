@@ -1,4 +1,9 @@
-module.exports = [
-	'API_KEY',
-	'SERVER_URL',
-];
+module.exports = {
+	required: [
+		'API_KEY',
+		'SERVER_URL',
+	],
+	optional: [
+		'FAVORITE_COLOR',
+	],
+};

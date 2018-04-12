@@ -32,17 +32,20 @@ Then in your application
 const DatastoreEnvironment = require('datastore-env');
 
 // File generated above
-const requiredVars = require('./config/requiredEnv.js');
+const envVars = require('./config/requiredEnv.js');
 
 const options = {
   namespace, // Namespace for datastore
   projectId, // Defaults to the value of process.env.PROJECT_ID
   path // Path to prepend to variable names when reading/writing to datastore
-  required: requiredVars,
+
+  optional: envVars.optional, // Load these variables from the datastore
+  required: envVars.required, // Load these variables and raise exception if not present
+
   // Default settings if a variable is missing
   defaults: {},
   requireDatastore: false, // Should an exception be raised if cannot connect to datastore (default: false)
-}
+};
 
 const env = new DatastoreEnvironment(options);
 
@@ -59,8 +62,9 @@ const settings = env.verifyEnvironment()
 dotenv runs synchronously, loadEnvironment, as it's querying a database is asynchronous.
 If you wish to wait on this without restructuring a lot of code, you could make use
 of something like [deasync](https://github.com/abbr/deasync).
+NOTE: The original author of this generally [advises against](https://github.com/vkurchatkin/deasync) using it, so don't make it a habbit ;-)
 
-You can achieve this like so:
+Example:
 
 ```javascript
 const deasync = require('deasync');
@@ -83,18 +87,30 @@ datastore settings.
 This script can be used as part of a build process to automatically add new keys.
 The script generates the list from a .env file
 
-If you wish to omit some of the variables listed in .env you can put a comment on
+Some variables may be optional, you can mark them by placing a comment above that starts
+with "optional"
+
+``` sh
+# optional Define the color for the background
+BG_COLOR=emerald
+```
+
+BG_COLOR will be added to the list of optional variables
+
+If you wish to omit some variables entirely in .env you can put a comment on
 the line before that starts with
 
 ``` sh
-# optional
-# datastore-env-ignore
+# datastore-env-ignore For development only
+DEBUG_MODE=trace
 ```
 
 To ignore all entries after a certain line, use
 
 ``` sh
 # datastore-env-ignore-all
+DEBUG_MODE=really_really_verbose
+DANCE_MODE=break
 ```
 
 # Initialising your Datastore
@@ -106,12 +122,12 @@ npm run env -- datastore-env upload:env -i .env
 
 This script will upload the contents of the selected `.env` file to your datastore
 
-By default the script will NOT overwrite existing keys, and will skip any keys
-marked optional in your `.env` file (using the same indicators in comments as when Generating
+By default the script will NOT overwrite existing keys, and will skip upload any required
+or optional keys in your `.env` file (using the same indicators in comments as when Generating
 required variables (see above).
 
 You can alter the behaviour by using the command line arguments `--overwrite` or
-`--include-optional` respectively.
+`--include=all|required|optional` respectively.
 
 # Running Locally
 There are 3 ways you can use and test this library when running locally.
@@ -125,12 +141,12 @@ There are 3 ways you can use and test this library when running locally.
 If it is not possible to connect to datastore, datastore-env will continue without
 (ie it will just use environment variables and defaults).
 
-## Datastore emulator
+### Datastore emulator
 
 You can run the Google Cloud Datastore Emulator locally:
 <https://cloud.google.com/datastore/docs/tools/datastore-emulator>
 
-## Connect to Cloud Datastore
+### Connect to Cloud Datastore
 
 Connect to one of your Cloud Datastore's by setting the environment variable
 `GOOGLE_APPLICATION_CREDENTIALS` to the path of a json credentials file with access

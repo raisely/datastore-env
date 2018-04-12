@@ -13,6 +13,7 @@ const { expect } = chai;
 
 const placeholder = '** __ SET THIS __ **';
 const required = ['DATASTORE_KEY', 'ENV_KEY', 'DEFAULT_KEY'];
+const optional = ['OPTIONAL_KEY'];
 const defaults = { DEFAULT_KEY: 'DEFAULT_KEY is set' };
 
 let datastore;
@@ -20,13 +21,16 @@ let datastore;
 describe('loadEnvironment', () => {
 	let environment;
 
-	before(() => { datastore = new Datastore(); });
+	before(async () => {
+		datastore = new Datastore();
+		await cleanUp();
+	});
 
 	describe('When all config is absent', () => {
 		before(() => {
 			before(() => { datastore = new Datastore(); });
 
-			environment = new DatastoreEnvironment({ required });
+			environment = new DatastoreEnvironment({ required, optional });
 		});
 
 		afterEach(cleanEnv);
@@ -49,6 +53,16 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 			const promises = required.map(key =>
 				checkDatastoreKey(key, placeholder));
 			await Promise.all(promises);
+		});
+		it("doesn't create a placeholder for optional key", async () => {
+			await expect(environment.loadEnvironment(true)).to.eventually
+				.be.rejectedWith(/configuration keys are missing/);
+
+			const key = optional[0];
+			const dsKey = datastore.key(['Env', key.toUpperCase()]);
+			const result = await datastore.get(dsKey);
+			const actual = result[0] ? result[0].value : undefined;
+			expect(actual, `${key} should not have been set (${actual})`).to.be.an('undefined');
 		});
 		it("doesn't load placeholder variables into environment", async () => {
 			await expect(environment.loadEnvironment(true)).to.eventually
@@ -73,6 +87,10 @@ You can edit them at https://console.cloud.google.com/datastore/entities/query?p
 
 		it('Sets variable from datastore', () => {
 			checkKey('DATASTORE_KEY');
+		});
+
+		it('Sets optional variable from datastore', () => {
+			checkKey('OPTIONAL_KEY');
 		});
 
 		it('Sets variable from defaults', () => {
@@ -186,9 +204,11 @@ async function setKey(key, value) {
 async function init() {
 	process.env.ENV_KEY = 'ENV_KEY is set';
 	await setKey('DATASTORE_KEY');
+	await setKey('OPTIONAL_KEY');
 
 	const environment = new DatastoreEnvironment({
 		required,
+		optional,
 		defaults,
 	});
 
@@ -203,6 +223,6 @@ function cleanEnv() {
 
 async function cleanUp() {
 	cleanEnv();
-	const keys = required.map(key => datastore.key(['Env', key]));
+	const keys = required.concat(optional).map(key => datastore.key(['Env', key]));
 	await datastore.delete(keys);
 }
