@@ -154,3 +154,18 @@ to the service.
 
 Learn more about getting a credentials file at:
 <https://developers.google.com/accounts/docs/application-default-credentials>
+
+# Contributing
+
+Contributions are welcome. Please submit a pull request and include tests.
+
+Please follow the coding style in `.editorconfig` and `.eslintrc`.
+
+Contributions should pass `npm test && npm run lint` (see below on testing)
+
+## Testing
+
+1. Install the [Google Datastore Emulator](https://cloud.google.com/datastore/docs/tools/datastore-emulator)
+2. In one terminal run `npm run datastore`
+3. Copy the export command to another terminal window, eg `export DATASTORE_EMULATOR_HOST=localhost:8081`
+4. Run `npm test`
