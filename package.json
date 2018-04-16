@@ -9,6 +9,9 @@
     "datastore": "gcloud beta emulators datastore start --no-store-on-disk"
   },
   "bin" : { "datastore-env" : "./datastoreEnv.js" },
+  "engines": {
+    "node": ">=7.6"
+  },
   "keywords": [
     "google-datastore",
     "datastore",
