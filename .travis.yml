@@ -8,3 +8,11 @@ install:
 
 script:
   - npm test
+
+dist: trusty
+  apt:
+    packages:
+    - google-cloud-sdk
+before_script:
+- gcloud beta emulators datastore start &
+- $(gcloud beta emulators datastore env-init)
