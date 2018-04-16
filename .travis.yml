@@ -6,6 +6,7 @@ node_js:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq google-cloud-sdk
+  - gcloud components install cloud-datastore-emulator
 
 install:
   - npm install
