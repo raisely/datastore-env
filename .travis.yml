@@ -13,6 +13,7 @@ before_install:
   # Add gcloud to $PATH
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud version
+  - gcloud components install cloud-datastore-emulator
 
 install:
   - npm install
