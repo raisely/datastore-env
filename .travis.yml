@@ -3,16 +3,16 @@ language: node_js
 node_js:
   - stable
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq google-cloud-sdk
+
 install:
   - npm install
 
 script:
   - npm run test:ci
 
-dist: trusty
-  apt:
-    packages:
-    - google-cloud-sdk
 before_script:
-- gcloud beta emulators datastore start &
-- $(gcloud beta emulators datastore env-init)
+  - gcloud beta emulators datastore start &
+  - $(gcloud beta emulators datastore env-init)
