@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha -w test/",
-	"test:ci": "mocha test/",
+    "test:ci": "mocha test/",
     "datastore": "gcloud beta emulators datastore start --no-store-on-disk"
   },
   "bin" : { "datastore-env" : "./datastoreEnv.js" },
@@ -18,7 +18,7 @@
     "datastore",
     ".env",
     "env",
-	"dotenv",
+    "dotenv",
     "google",
     "cloud"
   ],
