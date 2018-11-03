@@ -18,6 +18,16 @@ if you don't want to refactor code and don't want API keys, etc stored in your a
 
 NB: If you use a `.env` file, you must still use a tool like [dotenv](https://github.com/motdotla/dotenv) to load those variables into `process.env`.
 
+# Why?
+
+Up until recently, google cloud didn't support a convenient way of storing environment variables except 
+hardcoding them in files that were likely to go into source control.
+
+datastore-env was created as a simple way to bootstrap applications that were already heavily dependent on 
+`process.env` into the google cloud environment.
+
+Even though environment variables are now supported, this provides some nifty conveniences.
+
 # Getting Started
 
 ```sh
