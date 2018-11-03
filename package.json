@@ -23,7 +23,7 @@
     "cloud"
   ],
   "author": "",
-  "license": "JWL",
+  "license": "NoHarm",
   "dependencies": {
     "@google-cloud/datastore": "^1.4.0",
     "lodash": "^4.17.0",
