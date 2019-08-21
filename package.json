@@ -1,6 +1,6 @@
 {
   "name": "datastore-env",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Retrieve .env from google datastore",
   "main": "index.js",
   "scripts": {
